@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ClinicDiet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0EA5E9;
+      --primary-dark: #0284C7;
+      --primary-light: #E0F2FE;
+      --accent: #FF6B6B;
+      --accent-light: #FFE8E8;
+      --green: #2ED573;
+      --green-light: #E8FFF0;
+      --blue: #4FACFE;
+      --blue-light: #E8F4FF;
+      --orange: #FFA502;
+      --orange-light: #FFF5E0;
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #1A1A2E;
+      --text-secondary: #6B7280;
+      --text-muted: #9CA3AF;
+      --border: #F0F0F5;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.08);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --radius-xs: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 100px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      background: var(--card);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.85);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .header-actions { display: flex; gap: 8px; }
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .header-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .header-btn:active { transform: scale(0.92); }
+
+    /* ===== Bottom Navigation ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+      padding: 6px 8px 28px;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 0;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 500;
+      gap: 3px;
+      transition: all 0.2s;
+      position: relative;
+      font-family: inherit;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: -7px;
+      width: 20px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .nav-item .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      transition: all 0.2s;
+    }
+
+    /* ===== Pages ===== */
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ===== Cards ===== */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      margin: 12px 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.3px;
+    }
+    .card-title .icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .card-title .icon-badge svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      font-family: inherit;
+      letter-spacing: -0.2px;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      color: white;
+      box-shadow: 0 4px 16px rgba(14,165,233,0.3);
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), #FF8E8E);
+      color: white;
+      box-shadow: 0 4px 16px rgba(255,107,107,0.3);
+    }
+    .btn-outline {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary-light);
+    }
+    .btn-ghost {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 13px;
+      width: auto;
+      border-radius: var(--radius-xs);
+    }
+
+    /* ===== HOME PAGE ===== */
+    .greeting {
+      padding: 24px 20px 0;
+    }
+    .greeting-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .greeting h2 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    .greeting h2 span {
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-stats {
+      margin: 20px 16px 0;
+      background: linear-gradient(135deg, #6C63FF, #38BDF8, #7DD3FC);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-stats::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .hero-stats::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: -20px;
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .hero-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+    }
+    .hero-stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+    .hero-stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+    .hero-stat-unit {
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .hero-progress {
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .hero-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.9);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hero-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 0 16px;
+      margin-top: 20px;
+    }
+    .quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      background: white;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .quick-action:active { transform: scale(0.95); box-shadow: var(--shadow); }
+    .qa-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .qa-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .qa-icon.food svg { stroke: var(--accent); }
+    .qa-icon.exercise svg { stroke: var(--green); }
+    .qa-icon.quiz svg { stroke: var(--blue); }
+    .qa-icon.video svg { stroke: var(--orange); }
+    .qa-icon.food { background: var(--accent-light); }
+    .qa-icon.exercise { background: var(--green-light); }
+    .qa-icon.quiz { background: var(--blue-light); }
+    .qa-icon.video { background: var(--orange-light); }
+    .qa-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: -0.2px;
+    }
+
+    /* Doctor message */
+    .doctor-msg {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .doctor-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), #00C6FB);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(79,172,254,0.3);
+    }
+    .doctor-avatar svg {
+      width: 22px;
+      height: 22px;
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .doctor-bubble {
+      background: var(--blue-light);
+      border-radius: 4px 18px 18px 18px;
+      padding: 14px 16px;
+      flex: 1;
+    }
+    .doctor-bubble .name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2563EB;
+      margin-bottom: 4px;
+    }
+    .doctor-bubble .msg {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .doctor-bubble .time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Week chart */
+    .week-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 6px;
+      height: 130px;
+      padding: 0 4px;
+    }
+    .week-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .week-bar {
+      width: 100%;
+      max-width: 28px;
+      border-radius: 8px 8px 4px 4px;
+      transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .week-bar.calories { background: linear-gradient(to top, var(--primary), #38BDF8); }
+    .week-bar.exercise { background: linear-gradient(to top, var(--green), #7BEDA0); }
+    .week-bar.today {
+      background: linear-gradient(to top, var(--accent), #FF8E8E);
+      box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+    }
+    .week-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+    .week-label.today { color: var(--accent); font-weight: 700; }
+    .week-value {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    /* ===== FOOD PAGE ===== */
+    .date-selector {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .date-selector::-webkit-scrollbar { display: none; }
+    .date-item {
+      min-width: 50px;
+      padding: 10px 6px;
+      text-align: center;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      background: white;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .date-item.active {
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .date-item .dow { font-size: 10px; font-weight: 500; opacity: 0.6; }
+    .date-item .day { font-size: 18px; font-weight: 800; margin-top: 2px; }
+    .date-item.active .dow { opacity: 1; }
+
+    .daily-total {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      padding: 0 16px;
+      margin-bottom: 4px;
+    }
+    .dt-card {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 14px 12px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .dt-card .dt-value {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .dt-card .dt-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .camera-area {
+      border-radius: var(--radius);
+      padding: 36px 24px;
+      text-align: center;
+      margin: 12px 16px;
+      background: linear-gradient(135deg, #FFF5F5, #FFE8E8, #FFD5D5);
+      border: 2px dashed rgba(255,107,107,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .camera-area:active { transform: scale(0.99); }
+    .camera-icon-wrap {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 36px;
+      box-shadow: 0 4px 20px rgba(255,107,107,0.15);
+    }
+    .camera-area h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .camera-area p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .food-history-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .food-history-item:last-child { border-bottom: none; }
+    .food-thumb {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+    .food-thumb.morning { background: #FEF3C7; }
+    .food-thumb.lunch { background: #DBEAFE; }
+    .food-thumb.snack { background: #FCE7F3; }
+    .food-thumb.dinner { background: #D1FAE5; }
+    .food-info { flex: 1; }
+    .food-name { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+    .food-time { font-size: 12px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+    .food-cal {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .food-cal span {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .history-day {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .history-day:last-child { border-bottom: none; }
+    .history-date { font-size: 14px; font-weight: 600; }
+    .history-cals { font-size: 15px; font-weight: 700; color: var(--primary); }
+
+    /* ===== EXERCISE PAGE ===== */
+    .exercise-type-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .exercise-type-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .exercise-type-btn.selected {
+      border-color: var(--green);
+      background: var(--green-light);
+      box-shadow: 0 4px 12px rgba(46,213,115,0.15);
+    }
+    .exercise-type-btn:active { transform: scale(0.95); }
+    .et-icon { font-size: 30px; }
+    .et-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .exercise-type-btn.selected .et-label { color: #059669; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      background: white;
+      transition: all 0.2s;
+      font-family: inherit;
+      color: var(--text);
+    }
+    .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+
+    .exercise-log-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+    .exercise-log-icon {
+      font-size: 24px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--green-light);
+      border-radius: 14px;
+    }
+    .exercise-log-info { flex: 1; }
+    .exercise-log-name { font-size: 14px; font-weight: 600; }
+    .exercise-log-detail { font-size: 12px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+    .exercise-log-cal { font-size: 14px; font-weight: 700; color: var(--green); }
+
+    .exercise-summary-item { }
+    .exercise-summary-period {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .exercise-summary-main {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+    .exercise-summary-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .exercise-summary-unit {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .exercise-summary-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .exercise-summary-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ===== QUIZ PAGE ===== */
+    .quiz-category-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .quiz-category-tabs::-webkit-scrollbar { display: none; }
+    .quiz-tab {
+      padding: 10px 18px;
+      border-radius: 100px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      background: white;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      font-family: inherit;
+    }
+    .quiz-tab.active {
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.25);
+    }
+
+    .quiz-question {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      letter-spacing: -0.3px;
+    }
+    .quiz-number {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-option {
+      padding: 16px 18px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: white;
+      font-weight: 500;
+    }
+    .quiz-option:active { transform: scale(0.98); }
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+    .quiz-option.wrong {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .quiz-option-letter {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .quiz-option.correct .quiz-option-letter {
+      background: var(--green);
+      color: white;
+    }
+    .quiz-option.wrong .quiz-option-letter {
+      background: var(--accent);
+      color: white;
+    }
+
+    .quiz-progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .quiz-dot {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+    .quiz-dot.active { background: var(--primary); }
+    .quiz-dot.answered { background: var(--primary-light); }
+
+    .quiz-result {
+      text-align: center;
+      padding: 24px 0 0;
+      display: none;
+    }
+    .quiz-result.show { display: block; }
+    .quiz-result .result-icon { font-size: 56px; margin-bottom: 16px; }
+    .quiz-result .result-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .quiz-result .result-text strong { color: var(--primary); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .stat-item {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ===== VIDEO PAGE ===== */
+    .video-category-pills {
+      display: flex;
+      gap: 8px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    .video-category-pills::-webkit-scrollbar { display: none; }
+    .video-pill {
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      white-space: nowrap;
+      background: white;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .video-pill.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+
+    .video-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 0 16px 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .video-card:active { transform: scale(0.98); }
+    .video-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .play-btn {
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+    }
+    .duration {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+    .video-meta { padding: 16px; }
+    .video-title {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+    .video-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ===== DOCTOR PAGE ===== */
+    .tab-sub-nav {
+      display: flex;
+      gap: 0;
+      margin: 16px 16px 0;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+    }
+    .tab-sub-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-xs);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .tab-sub-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .comment-date-divider {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 20px 0 14px;
+      font-weight: 500;
+    }
+    .comment-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .comment-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+    .comment-avatar svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .comment-avatar.doctor {
+      background: linear-gradient(135deg, var(--blue), #00C6FB);
+      box-shadow: 0 3px 10px rgba(79,172,254,0.25);
+    }
+    .comment-avatar.patient {
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      box-shadow: 0 3px 10px rgba(14,165,233,0.25);
+    }
+    .comment-body { flex: 1; }
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .comment-name { font-size: 13px; font-weight: 700; }
+    .comment-role {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+    .comment-role.doctor { background: var(--blue-light); color: #2563EB; }
+    .comment-text {
+      font-size: 14px;
+      line-height: 1.7;
+      background: var(--bg);
+      padding: 14px 16px;
+      border-radius: 4px 16px 16px 16px;
+    }
+    .comment-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .message-input-area {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .message-input {
+      flex: 1;
+      padding: 12px 18px;
+      border: 2px solid var(--border);
+      border-radius: 100px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .message-input:focus { border-color: var(--primary); }
+    .send-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #38BDF8);
+      color: white;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+      transition: all 0.2s;
+    }
+    .send-btn:active { transform: scale(0.9); }
+
+    /* ===== SETTINGS PAGE ===== */
+    .subscription-banner {
+      background: linear-gradient(135deg, #6C63FF, #38BDF8, #7DD3FC);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin: 16px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .subscription-banner::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .subscription-banner .plan-label {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .subscription-banner .price {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin: 8px 0;
+    }
+    .subscription-banner .price span {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+    .subscription-banner .trial {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .subscription-banner .btn {
+      background: white;
+      color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .settings-item:last-child { border-bottom: none; }
+    .settings-item:active { opacity: 0.7; }
+    .settings-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .settings-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .settings-info { flex: 1; }
+    .settings-label { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+    .settings-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .settings-arrow { color: var(--text-muted); font-size: 16px; }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 28px 28px 0 0;
+      width: 100%;
+      max-width: 430px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px 20px 36px;
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: #DDD;
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .analysis-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #FFF5F5, #FFE8E8);
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      box-shadow: 0 8px 30px rgba(255,107,107,0.12);
+    }
+    .analysis-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .analysis-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    .analysis-item .ai-name { font-size: 14px; font-weight: 600; }
+    .analysis-item .ai-cal { font-size: 15px; font-weight: 800; color: var(--accent); }
+    .analysis-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, var(--accent-light), #FFD5D5);
+      border-radius: var(--radius-sm);
+      margin-top: 12px;
+    }
+    .analysis-total .at-label { font-size: 15px; font-weight: 700; }
+    .analysis-total .at-value {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -1px;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      background: var(--accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 9px;
+      padding: 0 5px;
+      position: absolute;
+      top: 0;
+      right: 50%;
+      transform: translateX(16px);
+    }
+
+    /* Misc */
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      padding: 20px 16px 12px;
+      letter-spacing: -0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="header-logo-mark">CD</div>
+      <h1>ClinicDiet</h1>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showPage('settings')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ============================= -->
+  <!-- HOME PAGE -->
+  <!-- ============================= -->
+  <div id="page-home" class="page active">
+    <div class="greeting">
+      <div class="greeting-sub">2026年3月7日（金）</div>
+      <h2>こんにちは、<span>田中さん</span></h2>
+    </div>
+
+    <!-- Hero Stats -->
+    <div class="hero-stats">
+      <div class="hero-stats-grid">
+        <div class="hero-stat">
+          <div class="hero-stat-label">摂取カロリー</div>
+          <div class="hero-stat-value">1,280</div>
+          <div class="hero-stat-unit">kcal</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">消費カロリー</div>
+          <div class="hero-stat-value">320</div>
+          <div class="hero-stat-unit">kcal</div>
+        </div>
+      </div>
+      <div class="hero-progress">
+        <div class="hero-progress-bar">
+          <div class="hero-progress-fill" style="width: 64%"></div>
+        </div>
+        <div class="hero-progress-label">
+          <span>目標まであと 720 kcal</span>
+          <span>64%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="quick-action" onclick="showPage('food')">
+        <div class="qa-icon food"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div class="qa-label">食事記録</div>
+      </button>
+      <button class="quick-action" onclick="showPage('exercise')">
+        <div class="qa-icon exercise"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg></div>
+        <div class="qa-label">運動記録</div>
+      </button>
+      <button class="quick-action" onclick="showPage('quiz')">
+        <div class="qa-icon quiz"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="qa-label">クイズ</div>
+      </button>
+      <button class="quick-action" onclick="showPage('video')">
+        <div class="qa-icon video"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        <div class="qa-label">動画</div>
+      </button>
+    </div>
+
+    <!-- Doctor Comment -->
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--blue-light)"><svg viewBox="0 0 24 24" stroke="#4FACFE"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        担当医からのコメント
+      </div>
+      <div class="doctor-msg">
+        <div class="doctor-avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="doctor-bubble">
+          <div class="name">山田先生</div>
+          <div class="msg">野菜の摂取量が増えてきていますね。この調子で続けましょう！</div>
+          <div class="time">今日 14:30</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================= -->
+  <!-- FOOD PAGE -->
+  <!-- ============================= -->
+  <div id="page-food" class="page">
+    <div class="date-selector">
+      <div class="date-item"><div class="dow">月</div><div class="day">3</div></div>
+      <div class="date-item"><div class="dow">火</div><div class="day">4</div></div>
+      <div class="date-item"><div class="dow">水</div><div class="day">5</div></div>
+      <div class="date-item"><div class="dow">木</div><div class="day">6</div></div>
+      <div class="date-item active"><div class="dow">金</div><div class="day">7</div></div>
+      <div class="date-item"><div class="dow">土</div><div class="day">8</div></div>
+      <div class="date-item"><div class="dow">日</div><div class="day">9</div></div>
+    </div>
+
+    <div class="daily-total">
+      <div class="dt-card">
+        <div class="dt-value" style="color: var(--accent)">1,280</div>
+        <div class="dt-label">摂取 kcal</div>
+      </div>
+      <div class="dt-card">
+        <div class="dt-value" style="color: var(--primary)">2,000</div>
+        <div class="dt-label">目標 kcal</div>
+      </div>
+      <div class="dt-card">
+        <div class="dt-value" style="color: var(--green)">720</div>
+        <div class="dt-label">残り kcal</div>
+      </div>
+    </div>
+
+    <div class="camera-area" onclick="showAnalysisModal()">
+      <div class="camera-icon-wrap">📸</div>
+      <h3>AI カロリー分析</h3>
+      <p>食事の写真を撮るだけで<br>AIがカロリーを自動で分析します</p>
+      <button class="btn btn-accent">写真を撮る / 選択する</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--accent-light)">🍽️</div>
+        今日の食事記録
+      </div>
+      <div class="food-history-item">
+        <div class="food-thumb morning">🍙</div>
+        <div class="food-info">
+          <div class="food-name">朝食：おにぎり、味噌汁</div>
+          <div class="food-time">7:30 AM</div>
+        </div>
+        <div class="food-cal">420 <span>kcal</span></div>
+      </div>
+      <div class="food-history-item">
+        <div class="food-thumb lunch">🍱</div>
+        <div class="food-info">
+          <div class="food-name">昼食：鶏肉弁当</div>
+          <div class="food-time">12:15 PM</div>
+        </div>
+        <div class="food-cal">580 <span>kcal</span></div>
+      </div>
+      <div class="food-history-item">
+        <div class="food-thumb snack">🍎</div>
+        <div class="food-info">
+          <div class="food-name">間食：りんご</div>
+          <div class="food-time">3:00 PM</div>
+        </div>
+        <div class="food-cal">80 <span>kcal</span></div>
+      </div>
+      <div class="food-history-item">
+        <div class="food-thumb dinner">🥗</div>
+        <div class="food-info">
+          <div class="food-name">夕食：サラダ、魚定食</div>
+          <div class="food-time">7:00 PM</div>
+        </div>
+        <div class="food-cal">200 <span>kcal</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--primary-light)">📅</div>
+        カロリー履歴
+      </div>
+      <div class="history-day">
+        <div class="history-date">3月6日（木）</div>
+        <div class="history-cals">1,980 kcal</div>
+      </div>
+      <div class="history-day">
+        <div class="history-date">3月5日（水）</div>
+        <div class="history-cals">1,450 kcal</div>
+      </div>
+      <div class="history-day">
+        <div class="history-date">3月4日（火）</div>
+        <div class="history-cals">1,820 kcal</div>
+      </div>
+      <div class="history-day">
+        <div class="history-date">3月3日（月）</div>
+        <div class="history-cals">1,650 kcal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- EXERCISE PAGE -->
+  <!-- ============================= -->
+  <div id="page-exercise" class="page">
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--green-light)">🏋️</div>
+        運動を記録する
+      </div>
+      <div class="form-group">
+        <label class="form-label">運動の種類</label>
+        <div class="exercise-type-grid">
+          <div class="exercise-type-btn selected" onclick="selectExercise(this)">
+            <div class="et-icon">🚶</div>
+            <div class="et-label">ウォーキング</div>
+          </div>
+          <div class="exercise-type-btn" onclick="selectExercise(this)">
+            <div class="et-icon">🏃</div>
+            <div class="et-label">ランニング</div>
+          </div>
+          <div class="exercise-type-btn" onclick="selectExercise(this)">
+            <div class="et-icon">🚴</div>
+            <div class="et-label">サイクリング</div>
+          </div>
+          <div class="exercise-type-btn" onclick="selectExercise(this)">
+            <div class="et-icon">💪</div>
+            <div class="et-label">筋トレ</div>
+          </div>
+          <div class="exercise-type-btn" onclick="selectExercise(this)">
+            <div class="et-icon">🧘</div>
+            <div class="et-label">ヨガ</div>
+          </div>
+          <div class="exercise-type-btn" onclick="selectExercise(this)">
+            <div class="et-icon">🏊</div>
+            <div class="et-label">水泳</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">時間（分）/ 回数</label>
+        <input type="number" class="form-input" placeholder="例: 30" value="30">
+      </div>
+      <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--green), #7BEDA0); box-shadow: 0 4px 16px rgba(46,213,115,0.3);" onclick="showExerciseAdded()">記録する</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--green-light)">📋</div>
+        今日の運動記録
+      </div>
+      <div class="exercise-log-item">
+        <div class="exercise-log-icon">🚶</div>
+        <div class="exercise-log-info">
+          <div class="exercise-log-name">ウォーキング</div>
+          <div class="exercise-log-detail">30分 ・ 7:00 AM</div>
+        </div>
+        <div class="exercise-log-cal">-150 kcal</div>
+      </div>
+      <div class="exercise-log-item">
+        <div class="exercise-log-icon">💪</div>
+        <div class="exercise-log-info">
+          <div class="exercise-log-name">腕立て伏せ</div>
+          <div class="exercise-log-detail">30回 ・ 7:40 AM</div>
+        </div>
+        <div class="exercise-log-cal">-50 kcal</div>
+      </div>
+      <div class="exercise-log-item">
+        <div class="exercise-log-icon">🧘</div>
+        <div class="exercise-log-info">
+          <div class="exercise-log-name">ヨガ</div>
+          <div class="exercise-log-detail">20分 ・ 8:00 AM</div>
+        </div>
+        <div class="exercise-log-cal">-60 kcal</div>
+      </div>
+      <div class="exercise-log-item">
+        <div class="exercise-log-icon">🚶</div>
+        <div class="exercise-log-info">
+          <div class="exercise-log-name">ウォーキング</div>
+          <div class="exercise-log-detail">15分 ・ 12:30 PM</div>
+        </div>
+        <div class="exercise-log-cal">-60 kcal</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--green-light)"><svg viewBox="0 0 24 24" stroke="#2ED573"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        運動量サマリー
+      </div>
+      <div class="exercise-summary">
+        <div class="exercise-summary-item">
+          <div class="exercise-summary-period">今週</div>
+          <div class="exercise-summary-stats">
+            <div class="exercise-summary-main">
+              <span class="exercise-summary-value" style="color: var(--green)">2,220</span>
+              <span class="exercise-summary-unit">kcal</span>
+            </div>
+            <div class="exercise-summary-detail">
+              <span>🏃 ランニング 3回</span>
+              <span>🚶 ウォーキング 5回</span>
+              <span>🧘 ヨガ 2回</span>
+            </div>
+            <div class="exercise-summary-sub">合計 7時間15分 ・ 10回</div>
+          </div>
+        </div>
+        <div style="height: 1px; background: var(--border); margin: 16px 0;"></div>
+        <div class="exercise-summary-item">
+          <div class="exercise-summary-period">今月</div>
+          <div class="exercise-summary-stats">
+            <div class="exercise-summary-main">
+              <span class="exercise-summary-value" style="color: var(--primary)">5,840</span>
+              <span class="exercise-summary-unit">kcal</span>
+            </div>
+            <div class="exercise-summary-detail">
+              <span>🏃 ランニング 8回</span>
+              <span>🚶 ウォーキング 12回</span>
+              <span>🧘 ヨガ 5回</span>
+            </div>
+            <div class="exercise-summary-sub">合計 18時間30分 ・ 25回</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- QUIZ PAGE -->
+  <!-- ============================= -->
+  <div id="page-quiz" class="page">
+    <div class="quiz-category-tabs">
+      <button class="quiz-tab active">🍽️ 食事</button>
+      <button class="quiz-tab">🏃 運動</button>
+      <button class="quiz-tab">🏥 医学</button>
+    </div>
+
+    <div class="card">
+      <div class="quiz-progress">
+        <div class="quiz-dot active"></div>
+        <div class="quiz-dot"></div>
+        <div class="quiz-dot"></div>
+        <div class="quiz-dot"></div>
+        <div class="quiz-dot"></div>
+      </div>
+      <div class="quiz-number">Q1 / 5</div>
+      <div class="quiz-question">
+        白米ごはん（お茶碗1杯 = 150g）のカロリーは約何 kcal でしょうか？
+      </div>
+      <div class="quiz-options">
+        <div class="quiz-option" onclick="selectQuizOption(this, false)">
+          <div class="quiz-option-letter">A</div>
+          <div>約 150 kcal</div>
+        </div>
+        <div class="quiz-option" onclick="selectQuizOption(this, true)">
+          <div class="quiz-option-letter">B</div>
+          <div>約 250 kcal</div>
+        </div>
+        <div class="quiz-option" onclick="selectQuizOption(this, false)">
+          <div class="quiz-option-letter">C</div>
+          <div>約 350 kcal</div>
+        </div>
+        <div class="quiz-option" onclick="selectQuizOption(this, false)">
+          <div class="quiz-option-letter">D</div>
+          <div>約 450 kcal</div>
+        </div>
+      </div>
+      <div class="quiz-result" id="quiz-result">
+        <div class="result-icon" id="result-icon">🎉</div>
+        <div class="result-text" id="result-text">
+          <strong>正解！</strong><br>
+          白米ごはん150gは約252kcalです。<br>
+          お茶碗の大きさで量が変わるので注意しましょう。
+        </div>
+        <button class="btn btn-primary" style="margin-top: 20px" onclick="resetQuiz()">次の問題へ →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================= -->
+  <!-- VIDEO PAGE -->
+  <!-- ============================= -->
+  <div id="page-video" class="page">
+    <div class="video-category-pills">
+      <div class="video-pill active">すべて</div>
+      <div class="video-pill">🥗 食事</div>
+      <div class="video-pill">🏋️ 運動</div>
+      <div class="video-pill">🏥 健康知識</div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb" style="background: linear-gradient(135deg, #0EA5E9, #0369A1);">
+        <div class="play-btn">▶</div>
+        <div class="duration">8:32</div>
+      </div>
+      <div class="video-meta">
+        <div class="video-title">【管理栄養士監修】簡単ヘルシーレシピ5選</div>
+        <div class="video-desc">忙しい方でも作れる低カロリーレシピをご紹介</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+        <div class="play-btn">▶</div>
+        <div class="duration">12:15</div>
+      </div>
+      <div class="video-meta">
+        <div class="video-title">自宅でできる有酸素運動 - 初心者向け30分</div>
+        <div class="video-desc">器具なしで始められるエクササイズメニュー</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+        <div class="play-btn">▶</div>
+        <div class="duration">6:48</div>
+      </div>
+      <div class="video-meta">
+        <div class="video-title">糖質制限の正しいやり方 - 医師が解説</div>
+        <div class="video-desc">山田先生が糖質制限の基礎知識を解説します</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+        <div class="play-btn">▶</div>
+        <div class="duration">10:05</div>
+      </div>
+      <div class="video-meta">
+        <div class="video-title">正しいウォーキングフォーム - 脂肪燃焼UP</div>
+        <div class="video-desc">歩き方を変えるだけでカロリー消費が変わります</div>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <div class="video-thumb" style="background: linear-gradient(135deg, #6366F1, #818CF8);">
+        <div class="play-btn">▶</div>
+        <div class="duration">15:22</div>
+      </div>
+      <div class="video-meta">
+        <div class="video-title">睡眠とダイエットの関係 - 質の良い睡眠で痩せる</div>
+        <div class="video-desc">看護師が教える睡眠改善のコツ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- DOCTOR PAGE -->
+  <!-- ============================= -->
+  <div id="page-doctor" class="page">
+    <div id="doctor-comments">
+      <div class="card">
+        <div class="card-title">
+          <div class="icon-badge" style="background: var(--blue-light)">💬</div>
+          担当医とのやりとり
+        </div>
+
+        <div class="comment-date-divider">── 3月7日（金） ──</div>
+        <div class="comment-item">
+          <div class="comment-avatar doctor"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-name">山田先生</span>
+              <span class="comment-role doctor">担当医</span>
+            </div>
+            <div class="comment-text">野菜の摂取量が増えてきていますね。この調子で続けましょう！次回の診察で詳しくお話しましょう。</div>
+            <div class="comment-time">14:30</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar patient"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-name">田中さん</span>
+            </div>
+            <div class="comment-text">ありがとうございます！サラダを毎食取り入れるようにしています。</div>
+            <div class="comment-time">15:10</div>
+          </div>
+        </div>
+
+        <div class="comment-date-divider">── 3月5日（水） ──</div>
+        <div class="comment-item">
+          <div class="comment-avatar doctor"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-name">山田先生</span>
+              <span class="comment-role doctor">担当医</span>
+            </div>
+            <div class="comment-text">運動の記録を見ました。ウォーキングの頻度が上がっていて素晴らしいです。水分補給も忘れずに！</div>
+            <div class="comment-time">10:00</div>
+          </div>
+        </div>
+
+        <div class="comment-item">
+          <div class="comment-avatar doctor"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-name">佐藤看護師</span>
+              <span class="comment-role doctor">看護師</span>
+            </div>
+            <div class="comment-text">血圧の数値も安定してきていますよ。食事記録もしっかりつけていて素晴らしいです！</div>
+            <div class="comment-time">11:15</div>
+          </div>
+        </div>
+
+        <div class="message-input-area">
+          <input type="text" class="message-input" placeholder="メッセージを入力...">
+          <button class="send-btn">➤</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================= -->
+  <!-- SETTINGS PAGE -->
+  <!-- ============================= -->
+  <div id="page-settings" class="page">
+    <div class="subscription-banner">
+      <div class="plan-label">Monthly Plan</div>
+      <div class="price">¥300<span>/月</span></div>
+      <div class="trial">初月無料でお試しいただけます</div>
+      <button class="btn">プランを管理する</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--primary-light)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        アカウント
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--green-light);"><svg viewBox="0 0 24 24" stroke="#2ED573"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label">プロフィール</div>
+          <div class="settings-desc">名前、年齢、身長、体重</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--orange-light);"><svg viewBox="0 0 24 24" stroke="#FFA502"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label">目標設定</div>
+          <div class="settings-desc">カロリー目標、運動目標</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--blue-light);"><svg viewBox="0 0 24 24" stroke="#4FACFE"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label">お支払い方法</div>
+          <div class="settings-desc">Stripe / 現金（病院承認）</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--primary-light);"><svg viewBox="0 0 24 24" stroke="#0EA5E9"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label">通知設定</div>
+          <div class="settings-desc">リマインダー、医師コメント通知</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--accent-light);"><svg viewBox="0 0 24 24" stroke="#FF6B6B"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/><path d="M10 11h4"/><path d="M12 9v4"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label">クリニック情報</div>
+          <div class="settings-desc">担当医、承認ステータス</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--bg)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+        その他
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--bg);"><svg viewBox="0 0 24 24" stroke="#888"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        <div class="settings-info"><div class="settings-label">利用規約</div></div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--bg);"><svg viewBox="0 0 24 24" stroke="#888"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="settings-info"><div class="settings-label">プライバシーポリシー</div></div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--bg);"><svg viewBox="0 0 24 24" stroke="#888"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="settings-info"><div class="settings-label">ヘルプ</div></div>
+        <div class="settings-arrow">›</div>
+      </div>
+      <div class="settings-item">
+        <div class="settings-icon" style="background: var(--accent-light);"><svg viewBox="0 0 24 24" stroke="#FF6B6B"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+        <div class="settings-info">
+          <div class="settings-label" style="color: var(--accent);">ログアウト</div>
+        </div>
+        <div class="settings-arrow">›</div>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; font-weight: 500;">
+      ClinicDiet v1.0.0
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- AI ANALYSIS MODAL -->
+  <!-- ============================= -->
+  <div class="modal-overlay" id="analysis-modal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">AI カロリー分析結果</div>
+
+      <div class="analysis-photo">🍛</div>
+      <p style="color: var(--text-muted); font-size: 13px; text-align: center; margin-bottom: 20px;">AIが食事内容を分析しました</p>
+
+      <div class="analysis-items">
+        <div class="analysis-item">
+          <div class="ai-name">🍚 白米（150g）</div>
+          <div class="ai-cal">252 kcal</div>
+        </div>
+        <div class="analysis-item">
+          <div class="ai-name">🍗 鶏の唐揚げ（3個）</div>
+          <div class="ai-cal">290 kcal</div>
+        </div>
+        <div class="analysis-item">
+          <div class="ai-name">🥬 サラダ</div>
+          <div class="ai-cal">35 kcal</div>
+        </div>
+        <div class="analysis-item">
+          <div class="ai-name">🍲 味噌汁</div>
+          <div class="ai-cal">45 kcal</div>
+        </div>
+      </div>
+
+      <div class="analysis-total">
+        <div class="at-label">合計カロリー</div>
+        <div class="at-value">622 kcal</div>
+      </div>
+
+      <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; text-align: center;">
+        ※ AIによる推定値です。実際のカロリーと異なる場合があります。
+      </p>
+
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" onclick="closeModal()">修正する</button>
+        <button class="btn btn-primary" onclick="closeModal()">記録する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAVIGATION ===== -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('home')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>ホーム</span>
+    </button>
+    <button class="nav-item" onclick="showPage('food')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      <span>食事</span>
+    </button>
+    <button class="nav-item" onclick="showPage('exercise')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" transform="translate(-6,1)"/><path d="M6 9l3 3-3 5"/><path d="M9 12l5-1 4 5"/><path d="M14 16l2 5"/><path d="M6 9l-3 5"/></svg>
+      <span>運動</span>
+    </button>
+    <button class="nav-item" onclick="showPage('quiz')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>クイズ</span>
+    </button>
+    <button class="nav-item" onclick="showPage('video')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>動画</span>
+    </button>
+    <button class="nav-item" style="position: relative;" onclick="showPage('doctor')">
+      <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+      <span>医師</span>
+      <span class="badge">2</span>
+    </button>
+  </nav>
+
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+      const navMap = { home: 0, food: 1, exercise: 2, quiz: 3, video: 4, doctor: 5, settings: -1 };
+      document.querySelectorAll('.nav-item').forEach((n, i) => {
+        n.classList.toggle('active', i === navMap[pageId]);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectExercise(el) {
+      document.querySelectorAll('.exercise-type-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function showExerciseAdded() {
+      alert('運動を記録しました！');
+    }
+
+    function selectQuizOption(el, isCorrect) {
+      if (document.querySelector('.quiz-option.correct, .quiz-option.wrong')) return;
+      if (isCorrect) {
+        el.classList.add('correct');
+        document.getElementById('result-icon').textContent = '🎉';
+        document.getElementById('result-text').innerHTML = '<strong>正解！</strong><br>白米ごはん150gは約252kcalです。<br>お茶碗の大きさで量が変わるので注意しましょう。';
+      } else {
+        el.classList.add('wrong');
+        document.querySelectorAll('.quiz-option')[1].classList.add('correct');
+        document.getElementById('result-icon').textContent = '😢';
+        document.getElementById('result-text').innerHTML = '<strong>不正解...</strong><br>正解は <strong>B. 約250kcal</strong> です。<br>白米ごはん150gは約252kcalです。';
+      }
+      document.getElementById('quiz-result').classList.add('show');
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('correct', 'wrong'));
+      document.getElementById('quiz-result').classList.remove('show');
+    }
+
+    function showAnalysisModal() {
+      document.getElementById('analysis-modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('analysis-modal').classList.remove('show');
+    }
+
+
+    document.getElementById('analysis-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>
