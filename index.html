@@ -748,151 +748,19 @@
       color: var(--text-muted);
     }
 
-    /* ===== QUIZ PAGE ===== */
-    .quiz-category-tabs {
-      display: flex;
-      gap: 8px;
-      padding: 16px;
-      overflow-x: auto;
-    }
-    .quiz-category-tabs::-webkit-scrollbar { display: none; }
-    .quiz-tab {
-      padding: 10px 18px;
-      border-radius: 100px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-      background: white;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
-      font-family: inherit;
-    }
-    .quiz-tab.active {
-      background: linear-gradient(135deg, var(--primary), #38BDF8);
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 4px 12px rgba(14,165,233,0.25);
+    /* Select input */
+    select.form-input {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239CA3AF' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
     }
 
-    .quiz-question {
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.7;
-      margin-bottom: 24px;
-      letter-spacing: -0.3px;
-    }
-    .quiz-number {
-      display: inline-block;
-      font-size: 12px;
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 12px;
-      background: var(--primary-light);
-      padding: 4px 12px;
-      border-radius: 100px;
-    }
-    .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .quiz-option {
-      padding: 16px 18px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: white;
-      font-weight: 500;
-    }
-    .quiz-option:active { transform: scale(0.98); }
-    .quiz-option.correct {
-      border-color: var(--green);
-      background: var(--green-light);
-    }
-    .quiz-option.wrong {
-      border-color: var(--accent);
-      background: var(--accent-light);
-    }
-    .quiz-option-letter {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    .quiz-option.correct .quiz-option-letter {
-      background: var(--green);
-      color: white;
-    }
-    .quiz-option.wrong .quiz-option-letter {
-      background: var(--accent);
-      color: white;
-    }
-
-    .quiz-progress {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
-    }
-    .quiz-dot {
-      flex: 1;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--border);
-      transition: all 0.3s;
-    }
-    .quiz-dot.active { background: var(--primary); }
-    .quiz-dot.answered { background: var(--primary-light); }
-
-    .quiz-result {
-      text-align: center;
-      padding: 24px 0 0;
-      display: none;
-    }
-    .quiz-result.show { display: block; }
-    .quiz-result .result-icon { font-size: 56px; margin-bottom: 16px; }
-    .quiz-result .result-text {
-      font-size: 15px;
-      line-height: 1.7;
-      color: var(--text-secondary);
-    }
-    .quiz-result .result-text strong { color: var(--primary); }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .stat-item {
-      background: var(--bg);
-      border-radius: var(--radius-sm);
-      padding: 16px 12px;
-      text-align: center;
-    }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 500;
-    }
+    /* Register methods */
+    .register-methods { display: flex; flex-direction: column; gap: 10px; }
 
     /* ===== VIDEO PAGE ===== */
     .video-category-pills {
@@ -1039,10 +907,6 @@
       background: linear-gradient(135deg, var(--blue), #00C6FB);
       box-shadow: 0 3px 10px rgba(79,172,254,0.25);
     }
-    .comment-avatar.patient {
-      background: linear-gradient(135deg, var(--primary), #38BDF8);
-      box-shadow: 0 3px 10px rgba(14,165,233,0.25);
-    }
     .comment-body { flex: 1; }
     .comment-header {
       display: flex;
@@ -1071,41 +935,6 @@
       margin-top: 6px;
       font-weight: 500;
     }
-
-    .message-input-area {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-    }
-    .message-input {
-      flex: 1;
-      padding: 12px 18px;
-      border: 2px solid var(--border);
-      border-radius: 100px;
-      font-size: 14px;
-      outline: none;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    .message-input:focus { border-color: var(--primary); }
-    .send-btn {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #38BDF8);
-      color: white;
-      border: none;
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
-      transition: all 0.2s;
-    }
-    .send-btn:active { transform: scale(0.9); }
 
     /* ===== SETTINGS PAGE ===== */
     .subscription-banner {
@@ -1366,20 +1195,14 @@
       </button>
     </div>
 
-    <!-- Doctor Comment -->
-    <div class="card">
-      <div class="card-title">
-        <div class="icon-badge" style="background: var(--blue-light)"><svg viewBox="0 0 24 24" stroke="#4FACFE"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-        医療スタッフからのコメント
+    <!-- Doctor Comment Notification -->
+    <div style="margin: 12px 16px; padding: 14px 18px; background: var(--blue-light); border-radius: var(--radius-sm); display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="showPage('doctor')">
+      <div style="font-size: 20px;">💬</div>
+      <div style="flex: 1;">
+        <div style="font-size: 13px; font-weight: 700; color: #2563EB;">担当医から新しいコメントがあります</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">山田先生 ・ 今日 14:30</div>
       </div>
-      <div class="doctor-msg">
-        <div class="doctor-avatar"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div class="doctor-bubble">
-          <div class="name">山田先生</div>
-          <div class="msg">野菜の摂取量が増えてきていますね。この調子で続けましょう！</div>
-          <div class="time">今日 14:30</div>
-        </div>
-      </div>
+      <div style="color: #2563EB; font-size: 16px;">›</div>
     </div>
 
   </div>
@@ -1403,9 +1226,9 @@
         <div class="dt-value" style="color: var(--accent)">1,280</div>
         <div class="dt-label">摂取 kcal</div>
       </div>
-      <div class="dt-card">
+      <div class="dt-card" onclick="showPage('settings')" style="cursor: pointer;">
         <div class="dt-value" style="color: var(--primary)">2,000</div>
-        <div class="dt-label">目標 kcal</div>
+        <div class="dt-label">目標 kcal<br><span style="font-size: 9px; color: var(--primary);">自分で設定 ›</span></div>
       </div>
       <div class="dt-card">
         <div class="dt-value" style="color: var(--green)">720</div>
@@ -1413,11 +1236,19 @@
       </div>
     </div>
 
-    <div class="camera-area" onclick="showAnalysisModal()">
-      <div class="camera-icon-wrap">📸</div>
-      <h3>AI カロリー推定</h3>
-      <p>食事の写真を撮ると<br>AIが総カロリーを推定します。あとから手修正もできます。</p>
-      <button class="btn btn-accent">写真を撮る / 選択する</button>
+    <div class="card">
+      <div class="card-title">
+        <div class="icon-badge" style="background: var(--accent-light)">📝</div>
+        食事を記録する
+      </div>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6;">
+        写真からAIが食事内容と総カロリーを推定します。<br>結果は自由に修正でき、記録ボタンを押すまで保存されません。<br>写真なしでも手入力で記録できます。
+      </p>
+      <div class="register-methods">
+        <button class="btn btn-accent" onclick="openMealModal('camera')">📷 写真を撮ってAI分析</button>
+        <button class="btn btn-outline" onclick="openMealModal('upload')">📁 写真を選んでAI分析</button>
+        <button class="btn btn-ghost" onclick="openMealModal('manual')">✏️ 写真なしで手入力</button>
+      </div>
     </div>
 
     <div class="card">
@@ -1525,7 +1356,7 @@
         <label class="form-label">時間（分）</label>
         <input type="number" class="form-input" placeholder="例: 30" value="30">
       </div>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; padding: 0 4px;">※ GPS連携・歩数連携・ウェアラブル連携は今後対応予定です</p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; padding: 0 4px; line-height: 1.6;">※ 消費カロリーは種目ごとの目安値で自動計算されます<br>（ウォーキング: 約5kcal/分、ランニング: 約10kcal/分、筋トレ: 約4kcal/分 など）</p>
       <button class="btn btn-primary" style="background: linear-gradient(135deg, var(--green), #7BEDA0); box-shadow: 0 4px 16px rgba(46,213,115,0.3);" onclick="showExerciseAdded()">記録する</button>
     </div>
 
@@ -1545,10 +1376,10 @@
       <div class="exercise-log-item">
         <div class="exercise-log-icon">💪</div>
         <div class="exercise-log-info">
-          <div class="exercise-log-name">腕立て伏せ</div>
-          <div class="exercise-log-detail">30回 ・ 7:40 AM</div>
+          <div class="exercise-log-name">筋トレ</div>
+          <div class="exercise-log-detail">30分 ・ 7:40 AM</div>
         </div>
-        <div class="exercise-log-cal">-50 kcal</div>
+        <div class="exercise-log-cal">-120 kcal</div>
       </div>
       <div class="exercise-log-item">
         <div class="exercise-log-icon">🧘</div>
@@ -1613,14 +1444,10 @@
   <!-- VIDEO PAGE -->
   <!-- ============================= -->
   <div id="page-video" class="page">
-    <div class="video-category-pills">
-      <div class="video-pill active">すべて</div>
-      <div class="video-pill">🥗 食事</div>
-      <div class="video-pill">🏋️ 運動</div>
-      <div class="video-pill">🏥 健康知識</div>
+    <div style="padding: 16px 16px 8px;">
+      <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">動画コンテンツ</div>
+      <div style="font-size: 12px; color: var(--text-muted);">※ 動画はYouTubeで配信しています</div>
     </div>
-
-    <div style="padding: 0 16px 8px; font-size: 12px; color: var(--text-muted);">※ 動画はYouTubeで配信しています</div>
 
     <div class="video-card">
       <div style="position: relative; width: 100%; padding-bottom: 56.25%; background: #000;">
@@ -1754,8 +1581,8 @@
       <div class="settings-item">
         <div class="settings-icon" style="background: var(--orange-light);"><svg viewBox="0 0 24 24" stroke="#FFA502"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <div class="settings-info">
-          <div class="settings-label">目標設定</div>
-          <div class="settings-desc">カロリー目標、運動目標</div>
+          <div class="settings-label">目標カロリー設定</div>
+          <div class="settings-desc">1日の目標カロリーを自分で設定</div>
         </div>
         <div class="settings-arrow">›</div>
       </div>
@@ -1801,36 +1628,65 @@
   <!-- ============================= -->
   <!-- AI ANALYSIS MODAL -->
   <!-- ============================= -->
-  <div class="modal-overlay" id="analysis-modal">
+  <div class="modal-overlay" id="meal-modal">
     <div class="modal">
       <div class="modal-handle"></div>
-      <div class="modal-title">AI カロリー推定結果</div>
+      <div class="modal-title" id="meal-modal-title">食事を記録する</div>
 
-      <div class="analysis-photo">🍛</div>
-      <p style="color: var(--text-muted); font-size: 13px; text-align: center; margin-bottom: 20px;">AIが写真から総カロリーを推定しました</p>
-
-      <div class="analysis-total" style="margin-top: 0;">
-        <div class="at-label">推定カロリー</div>
-        <div class="at-value">約 620 kcal</div>
+      <!-- AI分析時のみ表示 -->
+      <div id="ai-result-section" style="display: none;">
+        <div class="analysis-photo">🍛</div>
+        <div class="analysis-total" style="margin-top: 0; margin-bottom: 16px;">
+          <div class="at-label">AI推定カロリー</div>
+          <div class="at-value" id="ai-estimated-cal">約 620 kcal</div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 16px;">
+          AIが食事内容と総カロリーを推定しました。以下で自由に修正できます。
+        </p>
       </div>
 
-      <div class="form-group" style="margin-top: 20px;">
-        <label class="form-label">食事メモ（自由に修正できます）</label>
-        <input type="text" class="form-input" value="唐揚げ定食（ごはん・サラダ・味噌汁）" placeholder="食事の内容を入力...">
+      <!-- AI失敗時のメッセージ -->
+      <div id="ai-fail-section" style="display: none;">
+        <div style="padding: 16px; background: var(--orange-light); border-radius: var(--radius-sm); margin-bottom: 16px;">
+          <p style="font-size: 13px; color: #B45309; font-weight: 600;">⚠️ AI分析に失敗しました。手入力で記録してください。</p>
+        </div>
+      </div>
+
+      <!-- 手入力時のメッセージ -->
+      <div id="manual-section" style="display: none;">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6;">
+          食事内容とカロリーを入力して記録してください。
+        </p>
+      </div>
+
+      <!-- 共通入力フォーム -->
+      <div class="form-group">
+        <label class="form-label">食事区分</label>
+        <select class="form-input" id="meal-category">
+          <option value="朝食">朝食</option>
+          <option value="昼食">昼食</option>
+          <option value="夕食" selected>夕食</option>
+          <option value="間食">間食</option>
+        </select>
       </div>
 
       <div class="form-group">
-        <label class="form-label">カロリーを手修正</label>
-        <input type="number" class="form-input" value="620" placeholder="kcal">
+        <label class="form-label">食事内容</label>
+        <input type="text" class="form-input" id="meal-content" value="" placeholder="例：唐揚げ定食（ごはん・サラダ・味噌汁）">
       </div>
 
-      <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; text-align: center;">
-        ※ AIによる推定値です。必要に応じて上のフォームから修正してください。
+      <div class="form-group">
+        <label class="form-label">カロリー (kcal)</label>
+        <input type="number" class="form-input" id="meal-calories" value="" placeholder="例：620">
+      </div>
+
+      <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 4px;">
+        ※ 記録ボタンを押すまで保存されません
       </p>
 
       <div style="display: flex; gap: 10px; margin-top: 20px;">
         <button class="btn btn-outline" onclick="closeModal()">キャンセル</button>
-        <button class="btn btn-primary" onclick="closeModal()">この内容で記録する</button>
+        <button class="btn btn-primary" onclick="saveMeal()">記録する</button>
       </div>
     </div>
   </div>
@@ -1880,16 +1736,55 @@
       alert('運動を記録しました！');
     }
 
-    function showAnalysisModal() {
-      document.getElementById('analysis-modal').classList.add('show');
+    // --- 食事記録モーダル ---
+    function openMealModal(mode) {
+      const modal = document.getElementById('meal-modal');
+      const title = document.getElementById('meal-modal-title');
+      const aiSection = document.getElementById('ai-result-section');
+      const failSection = document.getElementById('ai-fail-section');
+      const manualSection = document.getElementById('manual-section');
+      const contentInput = document.getElementById('meal-content');
+      const calInput = document.getElementById('meal-calories');
+
+      // 全セクション非表示リセット
+      aiSection.style.display = 'none';
+      failSection.style.display = 'none';
+      manualSection.style.display = 'none';
+      contentInput.value = '';
+      calInput.value = '';
+
+      if (mode === 'camera' || mode === 'upload') {
+        // AI分析モード（デモ：成功を想定）
+        title.textContent = 'AI カロリー推定結果';
+        aiSection.style.display = 'block';
+        contentInput.value = '唐揚げ定食（ごはん・サラダ・味噌汁）';
+        calInput.value = '620';
+      } else {
+        // 手入力モード
+        title.textContent = '食事を手入力で記録';
+        manualSection.style.display = 'block';
+      }
+
+      modal.classList.add('show');
+    }
+
+    function saveMeal() {
+      const category = document.getElementById('meal-category').value;
+      const content = document.getElementById('meal-content').value;
+      const cal = document.getElementById('meal-calories').value;
+      if (!content || !cal) {
+        alert('食事内容とカロリーを入力してください。');
+        return;
+      }
+      alert(category + 'として記録しました：' + content + '（' + cal + ' kcal）');
+      closeModal();
     }
 
     function closeModal() {
-      document.getElementById('analysis-modal').classList.remove('show');
+      document.getElementById('meal-modal').classList.remove('show');
     }
 
-
-    document.getElementById('analysis-modal').addEventListener('click', function(e) {
+    document.getElementById('meal-modal').addEventListener('click', function(e) {
       if (e.target === this) closeModal();
     });
   </script>
